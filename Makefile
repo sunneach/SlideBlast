@@ -1,4 +1,5 @@
 compile: 
+	git submodule update --init
 	make -C ./deps/nitrogen
 	erl -make
 
