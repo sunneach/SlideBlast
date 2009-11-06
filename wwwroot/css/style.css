@@ -1,0 +1,164 @@
+body {
+  font-size: 12px;
+  font-family: Lucida Grande, Segoe UI, Calibri, Helvetica, Arial, Sans-Serif; }
+
+.chrome_middle {
+  margin: 50px auto 50px auto;
+  width: 700px; }
+
+h1 {
+  font-size: 24px; }
+
+h3 {
+  color: #555555;
+  margin: 30px 0px 7px 0px; }
+
+label {
+  padding: 7px 0px; }
+
+input {
+  margin-right: 10px; }
+
+.ui-layout-pane  /* all 'panes' */ {
+  overflow: auto; }
+
+.ui-layout-resizer  /* all 'resizer-bars' */ {
+  background: #878787; }
+
+.ui-layout-toggler  /* all 'toggler-buttons' */ {
+  background: #cccccc; }
+
+.lightbox_background {
+  opacity: 0.8; }
+
+.lightbox_placeholder {
+  margin-bottom: 200px; }
+
+.upload_container_div {
+  width: 600px;
+  margin: 30px auto;
+  line-height: 24px; }
+
+.upload_div {
+  font-size: 16.8px;
+  background-color: #d2dbe3;
+  border: solid 3px #6e6e6e;
+  color: #3a4756;
+  padding: 30px;
+  margin: 10px; }
+  .upload_div input {
+    font-size: 16.8px;
+    padding-right: 7px; }
+
+.main.north {
+  background: url(/images/slide_controls_gradient.jpg) #969696;
+  border-bottom: solid 1px #6e6e6e;
+  line-height: 60px;
+  padding: 0px 20px; }
+
+.control_button {
+  width: 40px;
+  height: 30px;
+  font-weight: bold; }
+  .control_button:HOVER {
+    color: #000099; }
+
+.main.center {
+  padding: 30px;
+  text-align: center;
+  overflow: scroll; }
+
+.main.center .current_slide > img {
+  border: solid 1px #dddddd; }
+
+.main.center .markdown {
+  font-size: 24px;
+  text-align: left; }
+
+.main.west {
+  text-align: center !important;
+  background-color: #d2dbe3;
+  border-right: solid 1px #6e6e6e;
+  overflow: scroll; }
+
+.main.west .slide {
+  display: block;
+  overflow: hidden;
+  margin: 0px auto;
+  border: solid 1px transparent;
+  color: #3a4756; }
+  .main.west .slide .slide_image_container {
+    display: block;
+    width: 80px;
+    height: 60px;
+    border: solid 2px #a1a8af;
+    overflow: hidden;
+    margin: 10px auto 7px auto;
+    background-color: white;
+    line-height: 60px;
+    color: #3a4756;
+    font-weight: bold;
+    cursor: pointer; }
+  .main.west .slide .slide_title {
+    position: relative;
+    top: -5px;
+    font-size: 8.4px; }
+
+.main.west .slide.selected {
+  background-color: #6d7f9d;
+  border-top: solid 1px #7383a0;
+  border-bottom: solid 1px #687c9d;
+  color: white;
+  background: url(/images/selected_slide_gradient.jpg); }
+  .main.west .slide.selected .slide_image_container {
+    color: #3a4756;
+    font-weight: bold; }
+
+.main.west .slide.selected .slide_image_container {
+  border: solid 2px #fff200 !important; }
+
+.main.west .slide.selected .slide_title {
+  font-weight: bold; }
+
+.main.east {
+  border-left: solid 1px #6e6e6e;
+  padding: 0px 20px;
+  overflow: auto; }
+
+.attendee_title {
+  display: block;
+  text-transform: uppercase;
+  margin: 10px 0px 7px 0px;
+  font-weight: bold;
+  border-bottom: double 3px black;
+  padding: 3px; }
+
+.main.east .attendee {
+  color: black; }
+  .main.east .attendee.selected {
+    font-weight: bold; }
+  .main.east .attendee.old {
+    color: #bbbbbb; }
+
+.name_dialog, .share_dialog {
+  -moz-border-radius-topleft: 7px;
+  -moz-border-radius-topright: 7px;
+  -moz-border-radius-bottomleft: 7px;
+  -moz-border-radius-bottomright: 7px;
+  -webkit-border-top-left-radius: 7px;
+  -webkit-border-top-right-radius: 7px;
+  -webkit-border-bottom-left-radius: 7px;
+  -webkit-border-bottom-right-radius: 7px;
+  display: block;
+  text-align: left;
+  padding: 40px;
+  background-color: white;
+  margin-bottom: 300px;
+  font-size: 16.8px; }
+  .name_dialog input, .share_dialog input {
+    font-size: 16.8px; }
+  .name_dialog .title, .share_dialog .title {
+    color: #6e6e6e;
+    display: block;
+    font-size: 24px;
+    margin-bottom: 14px; }

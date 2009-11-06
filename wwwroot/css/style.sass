@@ -1,0 +1,200 @@
+//import clear.sass
+
+!fsize = 12px
+!width = 700px
+
+
+body
+    :font-size = !fsize
+    :font-family = "Lucida Grande", "Segoe UI", "Calibri", "Helvetica", "Arial", "Sans-Serif"
+
+.chrome_middle
+    :margin = 50px "auto" 50px "auto"
+    :width = !width
+
+h1
+    :font-size = !fsize * 2
+
+h3
+    :color = #555
+    :margin = 30px 0px 7px 0px
+	
+label
+    :padding = 7px 0px
+	
+input
+    :margin-right = 10px
+
+.ui-layout-pane  /* all 'panes' */ 
+    :overflow = "auto" 
+
+.ui-layout-resizer  /* all 'resizer-bars' */ 
+    :background = #878787
+    
+.ui-layout-toggler  /* all 'toggler-buttons' */ 
+    :background = #ccc
+
+.lightbox_background
+    :opacity = 0.8
+    
+.lightbox_placeholder
+    :margin-bottom = 200px
+    
+=roundborder(!tl=3px, !tr=3px, !bl=3px, !br=3px)
+    :-moz-border-radius-topleft = !tl
+    :-moz-border-radius-topright = !tr
+    :-moz-border-radius-bottomleft = !bl
+    :-moz-border-radius-bottomright = !br 
+    :-webkit-border-top-left-radius = !tl
+    :-webkit-border-top-right-radius = !tr
+    :-webkit-border-bottom-left-radius = !bl
+    :-webkit-border-bottom-right-radius = !br
+            
+// *** Upload Page ***
+
+.upload_container_div
+    :width = 600px
+    :margin = 30px "auto"
+    :line-height = !fsize * 2
+    
+.upload_div
+    :font-size = !fsize * 1.4
+    :background-color = #D2DBE3
+    :border = "solid" 3px #6E6E6E
+    :color = #3A4756
+    :padding = 30px
+    :margin = 10px
+    
+    input
+        :font-size = !fsize * 1.4
+        :padding-right = 7px
+            
+// *** Slide Controls ***
+
+// Controls Gradient C4C4C4 to #969696
+
+.main.north
+    :background = url("/images/slide_controls_gradient.jpg") #969696
+    :border-bottom = "solid" 1px #6E6E6E
+    :line-height = 60px
+    :padding = 0px 20px
+    
+.control_button
+    :width = 40px
+    :height = 30px
+    :font-weight = "bold"
+
+    &:HOVER
+        :color = #000099
+    
+// *** Current Slide ***
+
+.main.center
+    :padding = 30px
+    :text-align = "center"
+    :overflow = "scroll"
+    
+.main.center .current_slide > img
+    :border = "solid" 1px #ddd
+    
+.main.center .markdown 
+    :font-size = !fsize * 2
+    :text-align = "left"
+        
+    
+// *** Slide List ***
+
+// Slide Gradient 7C8FAD to 61708E
+
+.main.west
+    :text-align = "center" !important
+    :background-color = #D2DBE3
+    :border-right = "solid" 1px #6E6E6E
+    :overflow = "scroll"
+
+.main.west .slide
+    :display = "block"
+    :overflow = "hidden"
+    :margin = 0px "auto"
+    :border = "solid" 1px "transparent"
+    :color = #3A4756
+
+    .slide_image_container
+        :display = "block"
+        :width = 80px
+        :height = 60px
+        :border = "solid" 2px #A1A8AF
+        :overflow = "hidden"
+        :margin = 10px "auto" 7px "auto"
+        :background-color = #fff
+        :line-height = 60px
+        :color = #3A4756
+        :font-weight = "bold"
+        :cursor = "pointer"
+        
+    .slide_title
+        :position = "relative"
+        :top = -5px
+        :font-size = !fsize * 0.7
+    
+.main.west .slide.selected
+    :background-color = #6D7F9D
+    :border-top = "solid" 1px #7383A0
+    :border-bottom = "solid" 1px #687C9D
+    :color = #fff
+    :background = url("/images/selected_slide_gradient.jpg")
+    
+    .slide_image_container
+        :color = #3A4756
+        :font-weight = "bold"
+        
+
+
+.main.west .slide.selected .slide_image_container
+    :border = "solid" 2px #FFF200 !important
+    
+.main.west .slide.selected .slide_title
+    :font-weight = "bold"
+    
+// *** Attendees ***
+
+.main.east 
+    :border-left = "solid" 1px #6E6E6E
+    :padding = 0px 20px
+    :overflow = "auto"
+
+.attendee_title
+    :display = "block"
+    :text-transform = "uppercase"
+    :margin = 10px 0px 7px 0px
+    :font-weight = "bold"
+    :border-bottom = "double" 3px #000
+    :padding = 3px
+    
+.main.east .attendee
+    :color = #000
+    
+    &.selected 
+        :font-weight = "bold"
+        
+    &.old
+        :color = #bbb
+
+// *** DIALOG ***
+
+.name_dialog, .share_dialog
+    +roundborder(7px, 7px, 7px, 7px)
+    :display = "block"
+    :text-align = "left"
+    :padding = 40px
+    :background-color = #fff
+    :margin-bottom = 300px
+    :font-size = !fsize * 1.4
+    input     
+        :font-size = !fsize * 1.4
+    
+    .title 
+        :color = #6e6e6e
+        :display = "block"
+        :font-size = !fsize * 2
+        :margin-bottom = 14px

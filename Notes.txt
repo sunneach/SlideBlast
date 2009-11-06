@@ -1,0 +1,36 @@
+Version 1
+---------
+
+Upload to Github
+
+Build instructions
+
+Seed random:uniform
+
+Change port
+
+Push to slideblast.com
+
+Set max upload size.
+
+Make admin controls to enable and disable uploads.
+
+
+
+Version 2
+---------
+
+Beautify the upload page.
+
+Better feedback on the upload page?
+
+Button to open a full screen window.
+
+Shorten links.
+
+"Share" button.
+
+iPhone interface for admins.
+
+
+slidecast
