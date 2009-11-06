@@ -20,7 +20,7 @@
 			<key>filename</key>
 			<string>Notes.txt</string>
 			<key>lastUsed</key>
-			<date>2009-11-06T21:35:51Z</date>
+			<date>2009-11-06T22:06:13Z</date>
 		</dict>
 		<dict>
 			<key>children</key>
@@ -239,6 +239,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{247, 0}, {1179, 878}}</string>
+	<string>{{210, 0}, {1179, 878}}</string>
 </dict>
 </plist>

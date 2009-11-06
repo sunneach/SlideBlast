@@ -1,13 +1,11 @@
 Version 1
 ---------
 
-Upload to Github
-
-Build instructions
+Add Riak as a submodule
 
 Seed random:uniform
 
-Change port
+Change Pound Port
 
 Push to slideblast.com
 
