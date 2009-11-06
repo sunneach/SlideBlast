@@ -7,7 +7,9 @@ SlideBlast is a realtime, web-based presentation tool built using Erlang, <a hre
 
 * Download and install Ghostscript. <a href="http://pages.cs.wisc.edu/~ghost/">Link</a>
 * Download and install Imagemagick. <a href="http://www.imagemagick.org/script/download.php">Link</a>
-* Download, Build, and Start SlideBlast
+
+Then, run the following:
+
 
 	git clone git://github.com/rklophaus/SlideBlast.git
 	cd SlideBlast
@@ -15,3 +17,5 @@ SlideBlast is a realtime, web-based presentation tool built using Erlang, <a hre
 	./start.sh
 	
 	Browse to http://localhost:8000
+	
+Enjoy!
