@@ -21,6 +21,9 @@ show_status(Msg) ->
     wf:flush().
 
 process_upload(OriginalName, TempFile) ->
+		caster_utils:seed_random(),
+		
+		% Try to process the file...
     case type(OriginalName) of
         unknown -> 
             % We don't recognize the file. 

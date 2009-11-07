@@ -1,6 +1,14 @@
 -module (caster_utils).
 -export ([pdf_to_pngs/1]).
 -export ([create_thumbnail/1]).
+-export ([seed_random/0]).
+
+seed_random() ->
+	<<A:128/integer>> = erlang:md5(atom_to_list(erlang:get_cookie())),
+	<<B:128/integer>> = erlang:md5(pid_to_list(self())),
+	{_, _, C} = now(),
+	random:seed(A, B, C).
+	
 
 %% Use GhostScript to break a .pdf into pngs.
 pdf_to_pngs(File) -> pdf_to_png(File, 1).
