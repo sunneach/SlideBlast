@@ -127,12 +127,11 @@ make_thumbnail(BlobID, Data) ->
 %%% PRIVATE FUNCTIONS
 
 sm_guid() ->
-    L = io_lib:format("~.32B", [random:uniform(10000)]),
+    L = io_lib:format("~.36B", [random:uniform(trunc(math:pow(36, 3)))]),
     list_to_binary(L).
 
 guid() ->
-    % L = io_lib:format("~.32B", [random:uniform(1000000000000000)]),
-    L = io_lib:format("~.32B", [random:uniform(1000000000)]),
+    L = io_lib:format("~.36B", [random:uniform(trunc(math:pow(36, 7)))]),
     list_to_binary(L).
     
 guid(B) ->
