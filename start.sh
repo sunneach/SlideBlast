@@ -1,6 +1,6 @@
 #!/bin/sh
 export NITROGEN_SRC=./deps/nitrogen
-export RIAK_SRC=../riak
+export RIAK_SRC=./deps/riak
 cd `dirname $0`
 
 echo Creating link to nitrogen support files...

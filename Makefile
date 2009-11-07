@@ -1,6 +1,7 @@
 compile: 
 	git submodule update --init
-	make -C ./deps/nitrogen
+	@(cd ./deps/nitrogen; make)
+	@(cd ./deps/riak; make)
 	erl -make
 
 css:

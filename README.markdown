@@ -10,9 +10,15 @@ SlideBlast is a realtime, web-based presentation tool built using Erlang, <a hre
 
 Then, run the following:
 
-
+	# Download the SlideBlast code...
 	git clone git://github.com/rklophaus/SlideBlast.git
-	cd SlideBlast
+	
+	# Download the Riak...
+	cd SlideBlast/deps
+	hg clone http://bitbucket.org/basho/riak/ 
+	
+	# Compile and start...
+	cd ..
 	make
 	./start.sh
 	
