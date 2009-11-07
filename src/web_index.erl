@@ -131,7 +131,8 @@ sm_guid() ->
     list_to_binary(L).
 
 guid() ->
-    L = io_lib:format("~.32B", [random:uniform(1000000000000000)]),
+    % L = io_lib:format("~.32B", [random:uniform(1000000000000000)]),
+    L = io_lib:format("~.32B", [random:uniform(1000000000)]),
     list_to_binary(L).
     
 guid(B) ->
