@@ -1,15 +1,9 @@
 Version 1
 ---------
 
-Add Riak as a submodule
+Convert to mochiweb.
 
-Seed random:uniform
-
-Change Pound Port
-
-Push to slideblast.com
-
-Set max upload size.
+Test max upload size.
 
 Make admin controls to enable and disable uploads.
 

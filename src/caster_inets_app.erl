@@ -6,7 +6,7 @@
 -define (PORT, 8000).
 
 start(_, _) ->
-    riak:start(["riak.config"]),
+	riak:start(["riak.config"]),
 	default_process_cabinet_handler:start(),
 	inets:start(),
 	{ok, Pid} = inets:start(httpd, [
@@ -28,9 +28,10 @@ do(Info) ->
 	RequestBridge = simple_bridge:make_request(inets_request_bridge, Info),
 	ResponseBridge = simple_bridge:make_response(inets_response_bridge, Info),
 	nitrogen:init_request(RequestBridge, ResponseBridge),
-    wf_handler:set_handler(named_route_handler, [
+	wf_handler:set_handler(named_route_handler, [
         % Modules...
         {"/", web_index},
+				{"/admin", web_admin},
         {"/view/", web_view},
         {"/img/", web_img},
         

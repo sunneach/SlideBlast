@@ -6,11 +6,16 @@
 main() -> #template { file="./wwwroot/caster.html" }.
 
 body() -> 
-    #panel { id=panel, body=[
-        "Upload a PDF or .ZIP file containing your slides...",
-        #p{},
-        #upload { tag=upload }
-    ]}.
+	case application:get_env(caster, stopped) of
+		{ok, true} -> 
+			#panel { body="SlideBlast.com is currently undergoing maintenance." };
+		_ ->
+	    #panel { id=panel, body=[
+	        "Upload a PDF or .ZIP file containing your slides...",
+	        #p{},
+	        #upload { tag=upload }
+	    ]}
+	end.
 
 upload_event(upload, OriginalName, TempFile) ->
     wf:comet(fun() -> process_upload(OriginalName, TempFile) end).
