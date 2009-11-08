@@ -17,20 +17,19 @@ body() ->
     Deck = deck:load_deck(DeckID),
     IsAdmin = Deck#deck.admin_token == AdminToken,
     CurrentSlide = hd(Deck#deck.slides),
-    
-    % Start the comet process under the <DeckID> pool.
-    % This is used for broadcasting events to other attendees
-    % viewing this slide deck.
-    {ok, Pid} = wf:comet_global(fun() -> comet_loop() end, DeckID),
-    
+        
     % Save things into session. 
     % A little gross, but it's the easiest way to make sure that 
     % both postbacks and the comet process are seeing the same values.
-    server_put(comet_pid, Pid),
     server_put(deck_id, DeckID),
     server_put(slide_ids, [X#slide.id || X <- Deck#deck.slides]),
-    server_put(slide_id, CurrentSlide#slide.id),
-    
+
+    % Start the comet process under the <DeckID> pool.
+    % This is used for broadcasting events to other attendees
+    % viewing this slide deck.
+    {ok, Pid} = wf:comet_global(fun() -> comet_loop(IsAdmin) end, DeckID),
+    server_put(comet_pid, Pid),
+
     % Show either the name dialog or the share dialog.
     case IsAdmin of
         true -> share_dialog_element:show();
@@ -130,11 +129,10 @@ delete_slide() ->
     deck:save_deck(DeckID, NewDeck),
     
     % Broadcast the deletion.
-    broadcast(fun() -> inner_delete_slide() end), 
-    inner_delete_slide().
+    broadcast(fun() -> inner_delete_slide(SlideID) end), 
+    inner_delete_slide(SlideID).
 
-inner_delete_slide() -> 
-    SlideID = server_get(slide_id),
+inner_delete_slide(SlideID) -> 
     SlideIDs = server_get(slide_ids),    
     case length(SlideIDs) > 1 of
         true -> 
@@ -162,7 +160,7 @@ broadcast(Function) ->
     wf:send_global(DeckID, {broadcasted, Function, Pid}),
     ok.
     
-comet_loop() ->
+comet_loop(IsAdmin) ->
     Self = self(),
     receive
         'INIT' -> 
@@ -170,31 +168,32 @@ comet_loop() ->
             % process to join the pool.
             move_in_direction(first),
             wf:flush(),
-            comet_loop();
+            comet_loop(IsAdmin);
             
-        {'JOIN', Pid} -> 
+        {'JOIN', Pid} when IsAdmin -> 
             % 'JOIN' is sent to _all_ processes in the pool
             % when a new process joins the pool. 
-            F = fun() -> inner_move_to_slide(server_get(slide_id)) end,
+            SlideID = server_get(slide_id),
+            F = fun() -> inner_move_to_slide(SlideID) end,
             Pid ! { broadcasted, F, self() },
-            comet_loop();
+            comet_loop(IsAdmin);
                    
         {broadcasted, Function, FromPid} when FromPid /= Self ->
             % Execute the broadcasted function as long as it wasn't
             % sent by us. 
             Function(),
             wf:flush(),
-            comet_loop();
+            comet_loop(IsAdmin);
             
         _Other -> 
-            comet_loop()
+            comet_loop(IsAdmin)
         
         after 3000 ->
             % If no activity, then call a function that will signal that 
             % our attendee is still connected, and loop.
             wf:wire(#function { function=fun() -> attendee_list_element:action(), [] end }),
             wf:flush(),
-            comet_loop()            
+            comet_loop(IsAdmin)
     end.
     
     

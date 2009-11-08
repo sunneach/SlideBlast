@@ -4,7 +4,7 @@
 -compile(export_all).
 
 
-%% Custome element to display a thumbnailed list of slides and listen for events.
+%% Custom element to display a thumbnailed list of slides and listen for events.
 %% - If the user clicks on a slide, then move_to(SlideID) is called in web_view.
 %% - If the user sorts the slides, then sort_slides(SlideIDs) is called in web_view.
 

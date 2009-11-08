@@ -68,12 +68,19 @@ input {
   text-align: center;
   overflow: scroll; }
 
+.main.center.fullscreen {
+  padding: 0px !important; }
+
 .main.center .current_slide > img {
   border: solid 1px #dddddd; }
 
 .main.center .markdown {
   font-size: 24px;
   text-align: left; }
+
+.syntaxhighlighter .line .number, .syntaxhighlighter .line .content {
+  font-size: 20px !important;
+  line-height: 25px !important; }
 
 .main.west {
   text-align: center !important;

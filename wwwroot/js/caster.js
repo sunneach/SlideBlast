@@ -21,11 +21,13 @@ function toggleFullScreen() {
         document.jquerylayouts[0].close("north");
         document.jquerylayouts[0].close("east");
         document.jquerylayouts[0].close("west");
+				jQuery(".main.center").addClass("fullscreen");
         document.isFullScreen = true;
     } else {
         document.jquerylayouts[0].open("north");
         document.jquerylayouts[0].open("east");
         document.jquerylayouts[0].open("west");
+				jQuery(".main.center").removeClass("fullscreen");
         document.isFullScreen = false;
     }
 }
@@ -39,11 +41,16 @@ function setShareURL(obj) {
 }
 
 function resizeCurrentSlide() {
+		if (document.isFullScreen) {
+			var offset=20;
+		} else {
+			var offset=80;
+		}
     jQuery(".current_slide").filter(":visible").children("img").each(function(img) {
         if (!this.originalWidth) this.originalWidth = this.width;
         if (!this.originalHeight) this.originalHeight = this.height;
-        var parentWidth= jQuery(this.parentNode.parentNode.parentNode).outerWidth() - 80;
-        var parentHeight = jQuery(this.parentNode.parentNode.parentNode).outerHeight() - 80;
+        var parentWidth= jQuery(this.parentNode.parentNode.parentNode).outerWidth() - offset;
+        var parentHeight = jQuery(this.parentNode.parentNode.parentNode).outerHeight() - offset;
         resizeFunction(this, parentWidth, parentHeight, this.originalWidth, this.originalHeight);
     });
 }

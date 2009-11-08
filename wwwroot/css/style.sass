@@ -93,6 +93,9 @@ input
     :padding = 30px
     :text-align = "center"
     :overflow = "scroll"
+
+.main.center.fullscreen
+    :padding = 0px !important
     
 .main.center .current_slide > img
     :border = "solid" 1px #ddd
@@ -100,7 +103,11 @@ input
 .main.center .markdown 
     :font-size = !fsize * 2
     :text-align = "left"
-        
+ 
+.syntaxhighlighter
+    .line .number, .line .content
+        :font-size = 20px !important
+        :line-height = 25px !important
     
 // *** Slide List ***
 
