@@ -6,16 +6,25 @@
 main() -> #template { file="./wwwroot/caster.html" }.
 
 body() -> 
-	case application:get_env(caster, stopped) of
-		{ok, true} -> 
-			#panel { body="SlideBlast.com is currently undergoing maintenance." };
-		_ ->
-	    #panel { id=panel, body=[
-	        "Upload a PDF or .ZIP file containing your slides...",
-	        #p{},
-	        #upload { tag=upload }
-	    ]}
-	end.
+    case application:get_env(caster, stopped) of
+    {ok, true} -> body_maintenance();
+    _ -> body_upload()
+end.
+
+body_maintenance() -> 
+    [
+        #panel { body="SlideBlast.com is currently undergoing maintenance." }
+    ].
+    
+body_upload() ->
+    [
+        #panel { id=uploadPanel, body=[
+            "Upload a PDF or .ZIP file containing your slides...",
+            #p{},
+            #upload { tag=upload }
+        ]},
+        #panel { id=statusPanel, style="display: none;", body="Processing..." }
+    ].
 
 upload_event(upload, OriginalName, TempFile) ->
     wf:comet(fun() -> process_upload(OriginalName, TempFile) end).
@@ -26,9 +35,9 @@ show_status(Msg) ->
     wf:flush().
 
 process_upload(OriginalName, TempFile) ->
-		caster_utils:seed_random(),
+    caster_utils:seed_random(),
 		
-		% Try to process the file...
+    % Try to process the file...
     case type(OriginalName) of
         unknown -> 
             % We don't recognize the file. 
@@ -36,23 +45,29 @@ process_upload(OriginalName, TempFile) ->
             file:delete(TempFile),
             wf:flash("Unknown file type.");
         Type -> 
-            wf:update(panel, #panel { id=statusPanel, class=statusPanel }),
-            show_status("Processing..."),
-            
+            wf:wire(uploadPanel, #hide {}),
+            wf:wire(statusPanel, #show {}),
+            wf:update(statusPanel, "Processing..."),
+                        
             % Split the uploaded file into slides...
             {ok, B} = file:read_file(TempFile),
             Slides = process_file(Type, TempFile, B),
-            Slides1 = lists:flatten([Slides]),
-            
-            % Save the deck...
-            DeckID = guid(),
-            AdminToken = sm_guid(),
-            Deck = #deck { admin_token=AdminToken, slides=Slides1 },
-            deck:save_deck(DeckID, Deck),
+            case lists:flatten([Slides]) of
+                [] -> 
+                    wf:flash("No slides were uploaded."),
+                    wf:wire(uploadPanel, #show{}),
+                    wf:wire(statusPanel, #hide{});
+                Slides1 ->
+                    % Save the deck...
+                    DeckID = guid(),
+                    AdminToken = sm_guid(),
+                    Deck = #deck { admin_token=AdminToken, slides=Slides1 },
+                    deck:save_deck(DeckID, Deck),
         
-            % Redirect to the web_view...
-            URL = "/view/" ++ wf:to_list(DeckID) ++ "/" ++ wf:to_list(AdminToken),
-            wf:redirect(URL)
+                    % Redirect to the web_view...
+                    URL = "/view/" ++ wf:to_list(DeckID) ++ "/" ++ wf:to_list(AdminToken),
+                    wf:redirect(URL)
+            end
     end.
     
     
