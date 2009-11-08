@@ -18,7 +18,7 @@ render_element(_HtmlID, Record) ->
         true -> wire_navigation_events();
         false -> ignore
     end,        
-    wire_keydown_event(70, toggle_full_screen), %"f" key
+    wire_fullscreen_event(),
 
     % Display the buttons.
     #panel { class=slide_controls, body=[
@@ -44,6 +44,11 @@ wire_navigation_events() ->
     wire_keydown_event(8,  delete_slide),  %DELETE
     wire_keydown_event(46, delete_slide), %DELETE
     ok.
+    
+wire_fullscreen_event() ->
+    wf:wire(#event { type=keydown, keycode=70, actions=[
+        "if (!document.disable_slide_controls) { toggleFullScreen(); } else { return true; }"
+    ]}).    
 
 % Listen for a key, but only when 'disable_slide_controls' flag is off.    
 wire_keydown_event(KeyCode, Postback) ->
@@ -61,9 +66,6 @@ event({move, Direction}) ->
     
 event(delete_slide) ->
     web_view:delete_slide();
-    
-event(toggle_full_screen) ->
-    wf:wire("toggleFullScreen();");
     
 event(share) ->
     share_dialog_element:show();

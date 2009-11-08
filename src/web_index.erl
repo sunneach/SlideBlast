@@ -7,9 +7,9 @@ main() -> #template { file="./wwwroot/caster.html" }.
 
 body() -> 
     case application:get_env(caster, stopped) of
-    {ok, true} -> body_maintenance();
-    _ -> body_upload()
-end.
+        {ok, true} -> body_maintenance();
+        _Other     -> body_upload()
+    end.
 
 body_maintenance() -> 
     [
@@ -29,11 +29,6 @@ body_upload() ->
 upload_event(upload, OriginalName, TempFile) ->
     wf:comet(fun() -> process_upload(OriginalName, TempFile) end).
     
-show_status(Msg) ->
-    wf:wire(statusPanel, [#appear{}]),
-    wf:update(statusPanel, [Msg]),
-    wf:flush().
-
 process_upload(OriginalName, TempFile) ->
     caster_utils:seed_random(),
 		
@@ -47,7 +42,7 @@ process_upload(OriginalName, TempFile) ->
         Type -> 
             wf:wire(uploadPanel, #hide {}),
             wf:wire(statusPanel, #show {}),
-            wf:update(statusPanel, "Processing..."),
+            wf:flush(),
                         
             % Split the uploaded file into slides...
             {ok, B} = file:read_file(TempFile),
@@ -70,7 +65,10 @@ process_upload(OriginalName, TempFile) ->
             end
     end.
     
-    
+show_status(Msg) ->
+    wf:wire(statusPanel, [#appear{}]),
+    wf:update(statusPanel, Msg),
+    wf:flush().
     
 %%% PROCESS_FILE/3 -
 %%% Given a file, split it into #slide records.
@@ -82,6 +80,7 @@ process_file(zip, File, B) -> % ZIP
     {ok, Results} = zip:unzip(B, [memory]),
     file:delete(File),
     F = fun({InnerFile, InnerB}, Acc) ->
+        show_status("Unzipping file: " ++ InnerFile ++ "..."),
         case type(InnerFile) of 
             unknown -> Acc;
             Type -> Acc ++ [process_file(Type, InnerFile, InnerB)]
