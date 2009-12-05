@@ -188,7 +188,7 @@ comet_loop(IsAdmin) ->
         _Other -> 
             comet_loop(IsAdmin)
         
-        after 3000 ->
+        after 10000 ->
             % If no activity, then call a function that will signal that 
             % our attendee is still connected, and loop.
             wf:wire(#function { function=fun() -> attendee_list_element:action(), [] end }),
@@ -245,4 +245,3 @@ server_put(Key, Value) ->
 server_get(Key) ->
     SeriesID = wf_context:series_id(),
     wf:session({SeriesID, Key}).
-    

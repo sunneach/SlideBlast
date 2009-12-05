@@ -2,32 +2,41 @@
 -include ("wf.inc").
 -include ("caster.hrl").
 -compile(export_all).
+-define (MAX_FILE_SIZE, 3 * 1024 * 1024).
 
 main() -> #template { file="./wwwroot/caster.html" }.
 
 body() -> 
-    case application:get_env(caster, stopped) of
-        {ok, true} -> body_maintenance();
-        _Other     -> body_upload()
-    end.
-
-body_maintenance() -> 
-    [
-        #panel { body="SlideBlast.com is currently undergoing maintenance." }
-    ].
-    
-body_upload() ->
+    show_only(uploadPanel),
     [
         #panel { id=uploadPanel, body=[
             "Upload a PDF or .ZIP file containing your slides...",
             #p{},
-            #upload { tag=upload }
+            #upload { tag=upload, show_button=false }
+        ]},
+        #panel { id=progressPanel, style="display: none; text-align: center;", body=[
+            #image { image="/images/progress.gif" }
         ]},
         #panel { id=statusPanel, style="display: none;", body="Processing..." }
-    ].
-
-upload_event(upload, OriginalName, TempFile) ->
-    wf:comet(fun() -> process_upload(OriginalName, TempFile) end).
+    ].    
+    
+show_only(ID) ->
+    wf:wire([
+        #show { target=uploadPanel,   show_if=(uploadPanel == ID) },
+        #show { target=progressPanel, show_if=(progressPanel == ID) },
+        #show { target=statusPanel,   show_if=(statusPanel == ID) },
+        #hide { target=uploadPanel,   show_if=(uploadPanel /= ID) },
+        #hide { target=progressPanel, show_if=(progressPanel /= ID) },
+        #hide { target=statusPanel,   show_if=(statusPanel /= ID) }
+    ]).
+    
+start_upload_event(upload) ->
+    show_only(progressPanel),
+    ok.
+    
+finish_upload_event(upload, OriginalName, TempFile) ->
+    wf:comet(fun() -> process_upload(OriginalName, TempFile) end),
+    ok.
     
 process_upload(OriginalName, TempFile) ->
     caster_utils:seed_random(),
@@ -40,28 +49,30 @@ process_upload(OriginalName, TempFile) ->
             file:delete(TempFile),
             wf:flash("Unknown file type.");
         Type -> 
-            wf:wire(uploadPanel, #hide {}),
-            wf:wire(statusPanel, #show {}),
+            show_only(statusPanel),
             wf:flush(),
                         
             % Split the uploaded file into slides...
             {ok, B} = file:read_file(TempFile),
-            Slides = process_file(Type, TempFile, B),
-            case lists:flatten([Slides]) of
-                [] -> 
+            
+            case process_file(Type, TempFile, B) of
+                {ok, []} ->
                     wf:flash("No slides were uploaded."),
-                    wf:wire(uploadPanel, #show{}),
-                    wf:wire(statusPanel, #hide{});
-                Slides1 ->
+                    show_only(uploadPanel);
+                                        
+                {ok, Slides} -> 
                     % Save the deck...
                     DeckID = guid(),
                     AdminToken = sm_guid(),
-                    Deck = #deck { admin_token=AdminToken, slides=Slides1 },
+                    Deck = #deck { admin_token=AdminToken, slides=Slides, created=caster_utils:now_seconds() },
                     deck:save_deck(DeckID, Deck),
         
                     % Redirect to the web_view...
                     URL = "/view/" ++ wf:to_list(DeckID) ++ "/" ++ wf:to_list(AdminToken),
-                    wf:redirect(URL)
+                    wf:redirect(URL);
+                
+                _ ->
+                    show_only(uploadPanel)
             end
     end.
     
@@ -76,17 +87,39 @@ show_status(Msg) ->
 process_file(zip, File, B) -> % ZIP
     % Unzip to memory.
     % Create a slide out of each file.
-    show_status("Unzipping file..."),
-    {ok, Results} = zip:unzip(B, [memory]),
-    file:delete(File),
-    F = fun({InnerFile, InnerB}, Acc) ->
-        show_status("Unzipping file: " ++ InnerFile ++ "..."),
-        case type(InnerFile) of 
-            unknown -> Acc;
-            Type -> Acc ++ [process_file(Type, InnerFile, InnerB)]
-        end
-    end,
-    lists:foldl(F, [], lists:sort(Results));
+    show_status("Checking .zip file sizes..."),
+    
+    case check_zip_file_integrity(B) of 
+        ok ->
+            show_status("Unzipping files..."),
+            {ok, Results} = zip:unzip(B, [memory]),
+            file:delete(File),
+            F = fun({InnerFile, InnerB}, Acc) ->
+                show_status("Unzipping file: " ++ InnerFile ++ "..."),
+                case type(InnerFile) of 
+                    unknown -> 
+                        Acc;
+                    Type -> 
+                        {ok, Slides} = process_file(Type, InnerFile, InnerB),
+                        Acc ++ Slides
+                end
+            end,
+            Slides = lists:foldl(F, [], lists:sort(Results)),
+            {ok, lists:flatten(Slides)};
+            
+        invalid_zip ->
+            Msg = wf:f("~s is not a valid zip file.", [File]),
+            wf:flash(Msg),
+            file:delete(File),
+            {error, invalid_zip};
+            
+        {too_big, BigFile} ->
+            Msg = wf:f("~s was too big.", [BigFile]),
+            wf:flash(Msg),
+            file:delete(File),
+            {error, too_big}
+    end;            
+            
     
 process_file(pdf, File, _B) -> % PDF
     % Call ghostscript to break into images. 
@@ -94,12 +127,17 @@ process_file(pdf, File, _B) -> % PDF
     show_status("Splitting pdf..."),
     BList = caster_utils:pdf_to_pngs(File),
     file:delete(File),
-    [process_file(png, undefined, B) || B <- BList];
+    Slides = [begin
+        {ok, S} = process_file(png, undefined, B),
+        S
+    end || B <- BList],
+    {ok, lists:flatten(Slides)};
     
 process_file(Type, File, B) -> % IMAGE or TEXT
     % Create a slide out of the image or text file. 
     file:delete(File),
-    new_slide(Type, B).
+    Slide = new_slide(Type, B),
+    {ok, lists:flatten([Slide])}.
     
     
 
@@ -110,7 +148,9 @@ new_slide(Type, B) when ?IS_TEXT(Type) ->
     % This is text. 
     % Just save it to a blob.
     BlobID = guid(B),
-    Slide = #slide { id=guid(), type=Type, blob_id=BlobID },
+    Slide = #slide { 
+        id=guid(), type=Type, blob_id=BlobID, created=caster_utils:now_seconds() 
+    },
     deck:save_blob(BlobID, B),
     Slide;
 
@@ -120,11 +160,39 @@ new_slide(Type, B) when ?IS_IMAGE(Type) ->
     % Save the image and the thumbnail to a blob.
     BlobID = guid(B),
     {ThumbnailID, Thumbnail} = make_thumbnail(BlobID, B),
-    Slide = #slide { id=guid(), type=Type, blob_id=BlobID, thumbnail_blob_id=ThumbnailID },
+    Slide = #slide { 
+        id=guid(), type=Type, blob_id=BlobID, thumbnail_blob_id=ThumbnailID, 
+        created=caster_utils:now_seconds() 
+    },
     deck:save_blob(ThumbnailID, Thumbnail),
     deck:save_blob(BlobID, B),
     Slide.
 
+
+%%% CHECK_ZIP_FILE_INTEGRITY/1
+%%% Make sure that we don't get a huge uploaded file.
+%%% Return either 'ok', 'invalid_zip', or {too_big, Filename}
+check_zip_file_integrity(B) ->
+    case zip:list_dir(B, [cooked]) of
+        {ok, [_Comment, ZipFiles]} ->
+            check_zip_file_sizes(lists:flatten([ZipFiles]));
+        {error, _} ->
+            invalid_zip
+    end.
+    
+
+check_zip_file_sizes([ZipFile|ZipFiles]) ->
+    Name = ZipFile#zip_file.name,
+    FileInfo = ZipFile#zip_file.info,
+    Size = FileInfo#file_info.size,
+    case Size > ?MAX_FILE_SIZE of
+        true -> 
+            {too_big, Name};
+        false -> 
+            check_zip_file_sizes(ZipFiles)
+    end;
+    
+check_zip_file_sizes([]) -> ok.    
 
 
 %%% MAKE_THUMBNAIL/2

@@ -36,7 +36,6 @@ print_slide(Slide, IsAdmin) ->
         id=slide_id(SlideID), class=slide, tag=Slide, 
         body=[
             #panel { class=slide_image_container, body=thumbnail(Slide#slide.type, Slide) }
-            % #span { class=slide_title, text=Slide#slide.title }
         ],
         actions=#event { show_if=IsAdmin, type=mousedown, postback={move_to, SlideID}, delegate=?MODULE }
     }.

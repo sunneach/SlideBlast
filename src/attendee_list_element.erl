@@ -3,11 +3,12 @@
 -include ("caster.hrl").
 -compile(export_all).
 -record (attendee, {name, pid, last_update}).
+-define (INACTIVE_AFTER, 30 * 1000 * 1000). % In MICROSECONDS
 
 %% Custom element to show a list of all attendees viewing this slide deck.
 %% Show active attendees in black, and inactive attendees in gray.
 %% An inactive attendee is an attendee whose web browser hasn't sent a "tick"
-%% message in about 5 seconds.
+%% message in about 30 seconds.
 
 
 % Required for a custom element.
@@ -36,7 +37,7 @@ color_attendee_list(L, LastTick) ->
     % Select the 
     wf:wire(attendee_id(self()), #add_class { class=selected }),
     [begin
-        IsOld = timer:now_diff(LastTick, X#attendee.last_update) > (5 * 1000 * 1000),
+        IsOld = timer:now_diff(LastTick, X#attendee.last_update) > ?INACTIVE_AFTER,
         case IsOld of
             true -> wf:wire(attendee_id(X), #add_class { class="old" });
             false -> ignore

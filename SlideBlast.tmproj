@@ -8,19 +8,13 @@
 			<key>filename</key>
 			<string>Makefile</string>
 			<key>lastUsed</key>
-			<date>2009-10-14T14:17:23Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>start.sh</string>
-			<key>lastUsed</key>
-			<date>2009-10-22T17:38:05Z</date>
+			<date>2009-11-07T14:02:15Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>Notes.txt</string>
 			<key>lastUsed</key>
-			<date>2009-11-06T22:06:13Z</date>
+			<date>2009-11-07T23:41:24Z</date>
 		</dict>
 		<dict>
 			<key>children</key>
@@ -29,7 +23,7 @@
 					<key>filename</key>
 					<string>apps/caster.app</string>
 					<key>lastUsed</key>
-					<date>2009-10-22T14:51:05Z</date>
+					<date>2009-11-08T00:07:03Z</date>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -44,7 +38,7 @@
 					<key>filename</key>
 					<string>start.sh</string>
 					<key>lastUsed</key>
-					<date>2009-10-22T17:29:44Z</date>
+					<date>2009-12-05T14:21:12Z</date>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -59,37 +53,43 @@
 					<key>filename</key>
 					<string>src/caster_inets_app.erl</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T21:30:49Z</date>
+					<date>2009-12-04T13:03:52Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
-					<string>src/deck.erl</string>
+					<string>src/caster_mochiweb_app.erl</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T12:36:41Z</date>
+					<date>2009-12-04T13:03:50Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>src/web_index.erl</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T21:30:50Z</date>
+					<date>2009-12-05T15:09:48Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>src/web_img.erl</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T00:37:08Z</date>
+					<date>2009-11-08T21:28:49Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>src/web_view.erl</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T21:30:49Z</date>
+					<date>2009-12-05T15:09:48Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>src/caster_utils.erl</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T19:34:36Z</date>
+					<date>2009-12-05T14:55:40Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>src/deck.erl</string>
+					<key>lastUsed</key>
+					<date>2009-11-09T17:31:19Z</date>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -98,13 +98,13 @@
 							<key>filename</key>
 							<string>src/slide_controls_element.erl</string>
 							<key>lastUsed</key>
-							<date>2009-11-06T20:49:21Z</date>
+							<date>2009-11-09T17:31:20Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>src/share_dialog_element.erl</string>
 							<key>lastUsed</key>
-							<date>2009-11-06T21:30:49Z</date>
+							<date>2009-12-05T15:09:49Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
@@ -116,25 +116,25 @@
 							<key>filename</key>
 							<string>src/attendee_list_element.erl</string>
 							<key>lastUsed</key>
-							<date>2009-11-06T15:55:47Z</date>
+							<date>2009-12-04T13:03:51Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>src/layout_element.erl</string>
 							<key>lastUsed</key>
-							<date>2009-11-06T12:45:11Z</date>
+							<date>2009-11-09T17:31:20Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>src/slide_list_element.erl</string>
 							<key>lastUsed</key>
-							<date>2009-11-06T21:18:03Z</date>
+							<date>2009-11-12T10:11:55Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>src/current_slide_element.erl</string>
 							<key>lastUsed</key>
-							<date>2009-11-06T21:18:03Z</date>
+							<date>2009-11-12T10:11:56Z</date>
 						</dict>
 					</array>
 					<key>expanded</key>
@@ -147,6 +147,8 @@
 			<true/>
 			<key>name</key>
 			<string>Code</string>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>children</key>
@@ -155,7 +157,7 @@
 					<key>filename</key>
 					<string>include/caster.hrl</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T16:50:27Z</date>
+					<date>2009-12-05T15:09:48Z</date>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -170,21 +172,19 @@
 					<key>filename</key>
 					<string>wwwroot/js/caster.js</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T21:12:41Z</date>
-					<key>selected</key>
-					<true/>
+					<date>2009-11-08T14:30:58Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>wwwroot/caster.html</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T21:30:48Z</date>
+					<date>2009-12-05T15:09:48Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>wwwroot/caster_grid.html</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T20:18:51Z</date>
+					<date>2009-11-09T17:31:18Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -196,13 +196,13 @@
 					<key>filename</key>
 					<string>wwwroot/css/clear.sass</string>
 					<key>lastUsed</key>
-					<date>2009-10-14T19:38:55Z</date>
+					<date>2009-12-05T15:09:48Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>wwwroot/css/style.sass</string>
 					<key>lastUsed</key>
-					<date>2009-11-06T21:12:39Z</date>
+					<date>2009-12-05T14:41:56Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -218,27 +218,12 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>200</integer>
+	<integer>196</integer>
 	<key>metaData</key>
-	<dict>
-		<key>start.sh</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>14</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-	</dict>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{210, 0}, {1179, 878}}</string>
+	<string>{{199, 0}, {1004, 778}}</string>
 </dict>
 </plist>

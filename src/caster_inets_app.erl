@@ -31,7 +31,6 @@ do(Info) ->
 	wf_handler:set_handler(named_route_handler, [
         % Modules...
         {"/", web_index},
-				{"/admin", web_admin},
         {"/view/", web_view},
         {"/img/", web_img},
         

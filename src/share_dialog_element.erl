@@ -16,11 +16,11 @@ render_element(_HtmlID, _Record) ->
             #p{},
             "Share the link below with your attendees:",
             #p{},
-            #textbox { id=urlTextBox, style="width: 500px;" },
+            #textbox { id=urlTextBox, style="width: 500px;", next=closeButton },
             #p{},
             "Bookmark the current page to return to this slideshow as the presenter.",
             #p{},
-            #button { postback=close, text="Close", delegate=?MODULE }
+            #button { id=closeButton, postback=close, text="Close", delegate=?MODULE }
         ]}
     ]}.
  

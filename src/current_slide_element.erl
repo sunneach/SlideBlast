@@ -40,10 +40,7 @@ print_slide_data(markdown, Slide) ->
 % Display a text slide. Includes Javascript to call the 
 % Syntax Highlighter Javascript library. Slow, but it looks nice.
 print_slide_data(Type, Slide) when ?IS_TEXT(Type) -> 
-    ?PRINT(Slide),
-    ?PRINT(Type),
     Text = deck:load_blob(Slide#slide.blob_id),
-    ?PRINT(clean(wf:to_list(Text))),
     [
     wf:f("<pre class=\"brush: ~s\">", [Type]),
     clean(wf:to_list(Text)),

@@ -10,7 +10,7 @@ start(_, _) ->
 	default_process_cabinet_handler:start(),
 	Options = [{ip, "127.0.0.1"}, {port, 8000}],
 	Loop = fun loop/1,
-	mochiweb_http:start([{name, mochiweb_example_app}, {loop, Loop} | Options]).
+	mochiweb_http:start([{name, mochiweb_example_app}, {loop, Loop}, {max, 2048} | Options]).
 
 loop(Req) ->
 	RequestBridge = simple_bridge:make_request(mochiweb_request_bridge, {Req, "./wwwroot"}),
@@ -19,7 +19,6 @@ loop(Req) ->
 	wf_handler:set_handler(named_route_handler, [
 		% Modules...
 		{"/", web_index},
-		{"/admin", web_admin},
 		{"/view/", web_view},
 		{"/img/", web_img},
 

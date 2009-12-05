@@ -1,13 +1,19 @@
 -module (caster_utils).
--export ([pdf_to_pngs/1]).
--export ([create_thumbnail/1]).
--export ([seed_random/0]).
+-export ([
+    pdf_to_pngs/1,
+    now_seconds/0,
+    create_thumbnail/1,
+    seed_random/0
+]).
 
 seed_random() ->
 	<<A1:128/integer>> = erlang:md5(atom_to_list(erlang:get_cookie())),
 	<<B1:128/integer>> = erlang:md5(pid_to_list(self())),
 	{A2, B2, C} = now(),
 	random:seed(A1 + A2, B1 + B2, C).
+	
+now_seconds() ->
+    calendar:datetime_to_gregorian_seconds(calendar:universal_time()).
 	
 
 %% Use GhostScript to break a .pdf into pngs.
