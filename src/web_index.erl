@@ -174,8 +174,9 @@ new_slide(Type, B) when ?IS_IMAGE(Type) ->
 %%% Return either 'ok', 'invalid_zip', or {too_big, Filename}
 check_zip_file_integrity(B) ->
     case zip:list_dir(B, [cooked]) of
-        {ok, [_Comment, ZipFiles]} ->
-            check_zip_file_sizes(lists:flatten([ZipFiles]));
+        {ok, ZipFiles} ->
+            ZipFiles1 = [X || X <- ZipFiles, is_record(X, zip_file)],
+            check_zip_file_sizes(lists:flatten([ZipFiles1]));
         {error, _} ->
             invalid_zip
     end.
