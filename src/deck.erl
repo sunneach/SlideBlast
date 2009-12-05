@@ -2,8 +2,16 @@
 -include ("caster.hrl").
 -export ([load_deck/1, save_deck/2]).
 -export ([load_blob/1, save_blob/2]).
+-export ([copy/3]).
 -define (DECK_BUCKET, <<"caster_deck">>).
 -define (BLOB_BUCKET, <<"blob_bucket">>).
+
+copy(DeckID, NewDeckID, AdminToken) 
+when is_binary(DeckID), is_binary(NewDeckID), is_binary(AdminToken) ->
+    Deck = load_deck(DeckID),
+    NewDeck = Deck#deck { admin_token=AdminToken },
+    save_deck(NewDeckID, NewDeck),
+    ok.    
 
 % Load a slide deck from Riak.
 load_deck(DeckID) ->
