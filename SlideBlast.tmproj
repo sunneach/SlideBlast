@@ -65,7 +65,7 @@
 					<key>filename</key>
 					<string>src/web_index.erl</string>
 					<key>lastUsed</key>
-					<date>2009-12-05T15:11:22Z</date>
+					<date>2009-12-06T16:12:49Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -89,7 +89,7 @@
 					<key>filename</key>
 					<string>src/deck.erl</string>
 					<key>lastUsed</key>
-					<date>2009-12-05T15:11:22Z</date>
+					<date>2009-12-06T16:12:49Z</date>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -147,8 +147,6 @@
 			<true/>
 			<key>name</key>
 			<string>Code</string>
-			<key>selected</key>
-			<true/>
 		</dict>
 		<dict>
 			<key>children</key>
@@ -157,7 +155,9 @@
 					<key>filename</key>
 					<string>include/caster.hrl</string>
 					<key>lastUsed</key>
-					<date>2009-12-05T15:09:48Z</date>
+					<date>2009-12-06T16:12:49Z</date>
+					<key>selected</key>
+					<true/>
 				</dict>
 			</array>
 			<key>expanded</key>
