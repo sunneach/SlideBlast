@@ -96,7 +96,7 @@ process_file(zip, File, B) -> % ZIP
             file:delete(File),
             F = fun({InnerFile, InnerB}, Acc) ->
                 show_status("Unzipping file: " ++ InnerFile ++ "..."),
-                case type(InnerFile) of 
+                case type(filename:basename(InnerFile)) of 
                     unknown -> 
                         Acc;
                     Type -> 
@@ -226,8 +226,11 @@ guid(B) ->
     ID = erlang:md5(B),
     list_to_binary([io_lib:format("~2.16.0B", [X]) || X <- binary_to_list(ID)]).
     
+%% First check if this is a hidden temp file such as a Mac OS metadata file
+type([$.|_]) -> unknown;
 %% Given a filename, return the file type.
 type(Filename) -> inner_type(filename:extension(Filename)).
+
 inner_type(".pdf") -> pdf;
 inner_type(".zip") -> zip;
 inner_type(".markdown") -> markdown;
