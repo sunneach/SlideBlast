@@ -17,6 +17,9 @@ Then, run the following:
 	cd SlideBlast/deps
 	hg clone http://bitbucket.org/basho/riak/ 
 	
+        # Roll back to the compatible version ... 
+        hg update -r riak-0.6
+
 	# Compile and start...
 	cd ..
 	make
