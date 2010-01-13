@@ -44,7 +44,7 @@ print_slide(Slide, IsAdmin) ->
 % the slide type in a little box.
 thumbnail(Type, _Slide) when ?IS_TEXT(Type) -> 
     Types = [
-        {ruby,"Ruby"},{python,"Python"},{as3,"AS3"},{php,"PHP"},{markdown, "Markdown"}, 
+        {ruby,"Ruby"}, {python,"Python"},{as3,"AS3"},{php,"PHP"},{markdown, "Markdown"}, 
         {text, "Text"}, {shell, ".sh"}, {csharp, "C#"}, {cpp, "C++"}, 
         {c, "C"}, {css, "CSS"}, {js, "Javascript"}, {java, "Java"}, {sql, "SQL"}, 
         {xml, "xml"},{erlang, "Erlang"} 

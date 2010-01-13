@@ -40,6 +40,10 @@ create_thumbnail(File) ->
     port_close(Port),
     B.
 
+%% convert default record values to []
+check_undefined(Value) when Value =:= undefined -> [];
+check_undefined(X) -> X.
+
 %% Private functions %%
 read_messages(Port, Acc) ->
     receive
@@ -52,6 +56,3 @@ read_messages(Port, Acc) ->
         after 5000 ->
             error
     end.
-
-check_undefined(Value) when Value =:= undefined -> [];
-check_undefined(X) -> X.

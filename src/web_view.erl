@@ -14,15 +14,11 @@ body() ->
         [A]    -> {wf:to_binary(A), <<>>};
         [A, B] -> {wf:to_binary(A), wf:to_binary(B)}
     end,
-?PRINT(DeckID),
    try     deck:load_deck(DeckID) of
    Deck ->
-	?PRINT({DeckID,Deck}),
 	    IsAdmin = Deck#deck.admin_token == AdminToken,
 	    Author  = Deck#deck.author,
 	    Title   = Deck#deck.title,
-	?PRINT(Author),
-	?PRINT(self()),
 
 	    CurrentSlide = hd(Deck#deck.slides),
 		

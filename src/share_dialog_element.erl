@@ -24,7 +24,7 @@ render_element(_HtmlID, _Record) ->
             #p{},
             #textbox { id=titleTextBox, style="width: 500px;", next=authorTextBox },
             #p{},
-            "Meeting coordinates:",
+            "Location:",
             #p{},
             #textbox { id=authorTextBox, style="width: 500px;", next=urlTextBox },
             #p{},

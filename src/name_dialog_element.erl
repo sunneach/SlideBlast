@@ -38,7 +38,6 @@ event(ok) ->
     wf:wire(name_lightbox, #hide {  }),
     Name = wf:q(nameTextBox) ++ suffix(web_view:server_get(is_admin)),
     Pid = web_view:server_get(attendee_comet_pid),
-    ?PRINT(Pid),
     Pid!{set_name, Name}.
 
 suffix(IsAdmin) ->

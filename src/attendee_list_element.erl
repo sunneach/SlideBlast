@@ -24,8 +24,6 @@ render_element(_HtmlID, Record) ->
     [
          #span { id=theTalkTitle,   class=attendee_title, text= Title },
          #span { id=theCoordinates, class=attendee,       text= "Location: " ++ Author},
-%         #span { id=theTalkTitle,   class=attendee_title, text=""}, %web_view:server_get(title) },
-%         #span { id=theCoordinates, class=attendee,       text=""}, %"Location: " ++ web_view:server_get(author)},
          #span { class=attendee_title, text="Participants" },
         #panel { id=attendeeList }
     ].

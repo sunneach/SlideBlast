@@ -9,7 +9,7 @@
 # Description:       This file should be used to construct scripts to be
 #                    placed in /etc/init.d.
 ### END INIT INFO
-# Serge sunneach onerlang.blogspot.com 01/12/2010
+# Serge sunneach http://onerlang.blogspot.com 01/12/2010
 # /etc/init.d/slideblast: start and stop the slideblast                         
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 DAEMON=/home/serge/src/SlideBlast/blast.sh

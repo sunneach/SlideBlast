@@ -40,7 +40,6 @@ finish_upload_event(upload, OriginalName, TempFile) ->
     
 process_upload(OriginalName, TempFile) ->
     caster_utils:seed_random(),
-?PRINT("upload started"),
     deck:clean(),
     % Try to process the file...
     case type(OriginalName) of
@@ -105,7 +104,6 @@ process_file(zip, File, B) -> % ZIP
                         Acc ++ Slides
                 end
             end,
-%?PRINT(Results),
             Slides = lists:foldl(F, [], lists:sort(Results)),
             {ok, lists:flatten(Slides)};
             

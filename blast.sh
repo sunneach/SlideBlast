@@ -1,6 +1,6 @@
 #!/bin/sh
 # start SlideBlast as unix daemon
-# by Serge "sunneach" onerlang.blogspot.com
+# by Serge "sunneach" http://onerlang.blogspot.com
 #
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 export BLAST=/home/serge/src/SlideBlast

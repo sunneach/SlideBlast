@@ -14,7 +14,7 @@ list_decks() ->
     {ok, Client} = riak:client_connect(node()),
     {ok, Keys}   = Client:list_keys(?DECK_BUCKET),
     Keys.
-
+% removes slides and decks after RETENTION (7 days)
 clean() ->
    [ archive_deck(DeckID,?RETENTION) || DeckID <- list_decks() ].
 
