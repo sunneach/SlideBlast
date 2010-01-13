@@ -26,3 +26,29 @@ iPhone interface for admins.
 
 
 slidecast
+
+Local Branch
+------------
+
+1. multiple extensions added for source codes
+2. title and location fields are added
+3. the presenter name is separated as "Joe - presenter"
+4. IE fix was reported for Nitrogen on 
+   http://onerlang.blogspot.com/2010/01/nitrogen-module-fix-makes-slideblast.html
+5. old presentations automatically removed from Riak after 7 days
+6. ubuntu installation for boot daemon added:
+   (the files slideblast and blast.sh assume /home/serge/src/SlideBlast installation):
+
+   sudo cp slideblast /etc/init.d
+   sudo chmod 755 /etc/init.d/slideblast
+   cd /etc/init.d
+   sudo update-rc.d slideblast defaults
+
+7. for 2048 open files on Ubuntu add two lines to the file
+   sudo vi /etc/security/limits.conf
+   add/edit the following:
+
+*                soft    nofile          2048
+*                hard    nofile          4096
+
+

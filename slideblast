@@ -1,0 +1,48 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          slideblast
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Example initscript
+# Description:       This file should be used to construct scripts to be
+#                    placed in /etc/init.d.
+### END INIT INFO
+# Serge sunneach onerlang.blogspot.com 01/12/2010
+# /etc/init.d/slideblast: start and stop the slideblast                         
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+DAEMON=/home/serge/src/SlideBlast/blast.sh
+OUT=/home/serge/res
+echo `date` > $OUT
+test -f /lib/lsb/init-functions || exit 1
+. /lib/lsb/init-functions
+
+#log_warning_msg "Starting slideblast $DAEMON"
+echo Starting slideblast  $1 $DAEMON >> $OUT
+
+case "$1" in
+start)
+echo log_begin_msg "Starting slideblast server..." >> $OUT
+echo start-stop-daemon --start --quiet --background --exec $DAEMON >> $OUT
+/bin/su serge $DAEMON >> /home/serge/res
+#start-stop-daemon --start --exec $DAEMON 
+;;
+restart)
+echo log_begin_msg "Stopping slideblast server..." >> $OUT
+killall heart
+epmd -kill
+echo log_begin_msg "Starting slideblast server..." >> $OUT
+start-stop-daemon --start --quiet --background --exec $DAEMON >> $OUT
+;;
+stop)
+echo log_begin_msg "Stopping slideblast server..." >> $OUT
+killall heart >> $OUT
+epmd -kill >> $OUT
+;;
+*)
+log_success_msg "Usage: /etc/init.d/slideblast {start|stop|restart}"
+exit 1
+esac
+
+exit 0
