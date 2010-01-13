@@ -68,6 +68,8 @@ event(delete_slide) ->
     web_view:delete_slide();
     
 event(share) ->
+    Author = web_view:server_get(author),
+    ?PRINT(Author),
     share_dialog_element:show();
     
 event(change_name) ->

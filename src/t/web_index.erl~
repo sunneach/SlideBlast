@@ -105,7 +105,6 @@ process_file(zip, File, B) -> % ZIP
                         Acc ++ Slides
                 end
             end,
-%?PRINT(Results),
             Slides = lists:foldl(F, [], lists:sort(Results)),
             {ok, lists:flatten(Slides)};
             
@@ -237,30 +236,14 @@ inner_type(".pdf") -> pdf;
 inner_type(".zip") -> zip;
 inner_type(".markdown") -> markdown;
 inner_type(".sh") -> shell;
-inner_type(".cs") -> csharp;
-inner_type(".css") -> css;
-inner_type(".c") -> c;
-inner_type(".h") -> c;
+inner_type(".cs") -> cs;
 inner_type(".cpp") -> cpp;
-inner_type(".hpp") -> cpp;
 inner_type(".js") -> js;
 inner_type(".java") -> java;
-inner_type(".cmd") -> text;
-inner_type(".bat") -> text;
 inner_type(".txt") -> text;
 inner_type(".sql") -> sql;
-inner_type(".html") -> xml;
-inner_type(".htm") -> xml;
 inner_type(".xml") -> xml;
-inner_type(".xsl") -> xml;
-inner_type(".xsd") -> xml;
 inner_type(".erl") -> erlang;
-inner_type(".hrl") -> erlang;
-inner_type(".as") -> as3;
-inner_type(".as3") -> as3;
-inner_type(".py") -> python;
-inner_type(".php") -> php;
-inner_type(".rb") -> ruby;
 inner_type(".gif") -> gif;
 inner_type(".jpg") -> jpeg;
 inner_type(".png") -> png;

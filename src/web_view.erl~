@@ -14,15 +14,13 @@ body() ->
         [A]    -> {wf:to_binary(A), <<>>};
         [A, B] -> {wf:to_binary(A), wf:to_binary(B)}
     end,
-?PRINT(DeckID),
-   try     deck:load_deck(DeckID) of
-   Deck ->
-	?PRINT({DeckID,Deck}),
+    try deck:load_deck(DeckID) of 
+    Deck -> 
 	    IsAdmin = Deck#deck.admin_token == AdminToken,
 	    Author  = Deck#deck.author,
 	    Title   = Deck#deck.title,
-	?PRINT(Author),
-	?PRINT(self()),
+	    ?PRINT(Author),
+	    ?PRINT(self()),
 
 	    CurrentSlide = hd(Deck#deck.slides),
 		
@@ -79,37 +77,37 @@ body() ->
 		}
 	    ]
     catch
-    _:_ -> wf:redirect("/")
+     _:_ -> wf:redirect("/")
     end.
-	 
-	 
-	    
-	%%% EVENTS %%%
+ 
+ 
+    
+%%% EVENTS %%%
 
-	% The functions below are called in the context of whichever user
-	% initiates the action. They then call broadcast/1 to broadcast
-	% the event to all other Comet processess in the same pool 
-	% as this slideshow, updating the interface for all attendees.
+% The functions below are called in the context of whichever user
+% initiates the action. They then call broadcast/1 to broadcast
+% the event to all other Comet processess in the same pool 
+% as this slideshow, updating the interface for all attendees.
 
-	move_to_slide(SlideID) -> 
-	    broadcast(fun() -> inner_move_to_slide(SlideID) end),
-	    inner_move_to_slide(SlideID).
-	    
-	inner_move_to_slide(NewSlideID) ->
-	    server_put(slide_id, NewSlideID),
-	    slide_list_element:move_to_slide(NewSlideID),
-	    current_slide_element:move_to_slide(NewSlideID),
-	    attendee_list_element:action(),
-	    ok.
-	    
-	    
-	move_in_direction(Direction) ->
-	    % Based on the selected direction, figure out the next slide to display.
-	    SlideID = server_get(slide_id),
-	    SlideIDs = server_get(slide_ids),
-	    NewSlideID = case Direction of
-		first -> first(SlideIDs);
-		previous -> previous(SlideIDs, SlideID);
+move_to_slide(SlideID) -> 
+    broadcast(fun() -> inner_move_to_slide(SlideID) end),
+    inner_move_to_slide(SlideID).
+    
+inner_move_to_slide(NewSlideID) ->
+    server_put(slide_id, NewSlideID),
+    slide_list_element:move_to_slide(NewSlideID),
+    current_slide_element:move_to_slide(NewSlideID),
+    attendee_list_element:action(),
+    ok.
+    
+    
+move_in_direction(Direction) ->
+    % Based on the selected direction, figure out the next slide to display.
+    SlideID = server_get(slide_id),
+    SlideIDs = server_get(slide_ids),
+    NewSlideID = case Direction of
+        first -> first(SlideIDs);
+        previous -> previous(SlideIDs, SlideID);
         next -> next(SlideIDs, SlideID);
         last -> last(SlideIDs)
     end,

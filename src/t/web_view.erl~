@@ -14,102 +14,96 @@ body() ->
         [A]    -> {wf:to_binary(A), <<>>};
         [A, B] -> {wf:to_binary(A), wf:to_binary(B)}
     end,
-?PRINT(DeckID),
-   try     deck:load_deck(DeckID) of
-   Deck ->
-	?PRINT({DeckID,Deck}),
-	    IsAdmin = Deck#deck.admin_token == AdminToken,
-	    Author  = Deck#deck.author,
-	    Title   = Deck#deck.title,
-	?PRINT(Author),
-	?PRINT(self()),
+    Deck = deck:load_deck(DeckID),
+    IsAdmin = Deck#deck.admin_token == AdminToken,
+    Author  = Deck#deck.author,
+    Title   = Deck#deck.title,
+?PRINT(Author),
+?PRINT(self()),
 
-	    CurrentSlide = hd(Deck#deck.slides),
-		
-	    % Save things into session. 
-	    % A little gross, but it's the easiest way to make sure that 
-	    % both postbacks and the comet process are seeing the same values.
-	    server_put(author, Author),
-	    server_put(title, Title),
+    CurrentSlide = hd(Deck#deck.slides),
+        
+    % Save things into session. 
+    % A little gross, but it's the easiest way to make sure that 
+    % both postbacks and the comet process are seeing the same values.
+    server_put(author, Author),
+    server_put(title, Title),
 
-	    server_put(is_admin, IsAdmin),
-	    server_put(deck_id, DeckID),
-	    server_put(slide_ids, [X#slide.id || X <- Deck#deck.slides]),
+    server_put(is_admin, IsAdmin),
+    server_put(deck_id, DeckID),
+    server_put(slide_ids, [X#slide.id || X <- Deck#deck.slides]),
 
-	    % Start the comet process under the <DeckID> pool.
-	    % This is used for broadcasting events to other attendees
-	    % viewing this slide deck.
-	    {ok, Pid} = wf:comet_global(fun() -> comet_loop(IsAdmin) end, DeckID),
-	    server_put(comet_pid, Pid),
+    % Start the comet process under the <DeckID> pool.
+    % This is used for broadcasting events to other attendees
+    % viewing this slide deck.
+    {ok, Pid} = wf:comet_global(fun() -> comet_loop(IsAdmin) end, DeckID),
+    server_put(comet_pid, Pid),
 
-	    % Show either the name dialog or the share dialog.
-	    case IsAdmin of
-		true ->     
-			 share_dialog_element:show();
+    % Show either the name dialog or the share dialog.
+    case IsAdmin of
+        true ->     
+                 share_dialog_element:show();
 
-		false -> name_dialog_element:show()
-	    end,
-	    
-	    % Layout...
-	    [
-		% Lightbox that prompts for the user's name...
-		#name_dialog { },
-		
-		% Lightbox to share the link with attendees...
-		#share_dialog { },
-		
-		% Main layout...
-		#layout {
-		    class=main,
-		
-		    % Slide controls on the top...
-		    north=#slide_controls { is_admin=IsAdmin },
-		    north_options = [{size, 60}, {spacing_open, 0}, {spacing_closed, 0}],
-		
-		    % Slide list to the left...
-		    west=#slide_list { deck=Deck, is_admin=IsAdmin },
-		    west_options=[{size, 140}, {spacing_open, 0}, {spacing_closed, 0}],
-		
-		    % Current slide in the center...
-		    center=#current_slide { deck=Deck, slide_id=CurrentSlide#slide.id },
-		    
-		    % Attendee list to the right...
-		    east=#attendee_list { deck_id=DeckID, title=Title, author=Author },
-		    east_options=[{size, 200}, {spacing_open, 0}, {spacing_closed, 0}]
-		}
-	    ]
-    catch
-    _:_ -> wf:redirect("/")
-    end.
-	 
-	 
-	    
-	%%% EVENTS %%%
+        false -> name_dialog_element:show()
+    end,
+    
+    % Layout...
+    [
+        % Lightbox that prompts for the user's name...
+        #name_dialog { },
+        
+        % Lightbox to share the link with attendees...
+        #share_dialog { },
+        
+        % Main layout...
+        #layout {
+            class=main,
+        
+            % Slide controls on the top...
+            north=#slide_controls { is_admin=IsAdmin },
+            north_options = [{size, 60}, {spacing_open, 0}, {spacing_closed, 0}],
+        
+            % Slide list to the left...
+            west=#slide_list { deck=Deck, is_admin=IsAdmin },
+            west_options=[{size, 140}, {spacing_open, 0}, {spacing_closed, 0}],
+        
+            % Current slide in the center...
+            center=#current_slide { deck=Deck, slide_id=CurrentSlide#slide.id },
+            
+            % Attendee list to the right...
+            east=#attendee_list { deck_id=DeckID },
+            east_options=[{size, 200}, {spacing_open, 0}, {spacing_closed, 0}]
+        }
+    ].
+ 
+ 
+    
+%%% EVENTS %%%
 
-	% The functions below are called in the context of whichever user
-	% initiates the action. They then call broadcast/1 to broadcast
-	% the event to all other Comet processess in the same pool 
-	% as this slideshow, updating the interface for all attendees.
+% The functions below are called in the context of whichever user
+% initiates the action. They then call broadcast/1 to broadcast
+% the event to all other Comet processess in the same pool 
+% as this slideshow, updating the interface for all attendees.
 
-	move_to_slide(SlideID) -> 
-	    broadcast(fun() -> inner_move_to_slide(SlideID) end),
-	    inner_move_to_slide(SlideID).
-	    
-	inner_move_to_slide(NewSlideID) ->
-	    server_put(slide_id, NewSlideID),
-	    slide_list_element:move_to_slide(NewSlideID),
-	    current_slide_element:move_to_slide(NewSlideID),
-	    attendee_list_element:action(),
-	    ok.
-	    
-	    
-	move_in_direction(Direction) ->
-	    % Based on the selected direction, figure out the next slide to display.
-	    SlideID = server_get(slide_id),
-	    SlideIDs = server_get(slide_ids),
-	    NewSlideID = case Direction of
-		first -> first(SlideIDs);
-		previous -> previous(SlideIDs, SlideID);
+move_to_slide(SlideID) -> 
+    broadcast(fun() -> inner_move_to_slide(SlideID) end),
+    inner_move_to_slide(SlideID).
+    
+inner_move_to_slide(NewSlideID) ->
+    server_put(slide_id, NewSlideID),
+    slide_list_element:move_to_slide(NewSlideID),
+    current_slide_element:move_to_slide(NewSlideID),
+    attendee_list_element:action(),
+    ok.
+    
+    
+move_in_direction(Direction) ->
+    % Based on the selected direction, figure out the next slide to display.
+    SlideID = server_get(slide_id),
+    SlideIDs = server_get(slide_ids),
+    NewSlideID = case Direction of
+        first -> first(SlideIDs);
+        previous -> previous(SlideIDs, SlideID);
         next -> next(SlideIDs, SlideID);
         last -> last(SlideIDs)
     end,

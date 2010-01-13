@@ -8,7 +8,8 @@
 start(_, _) ->
 	riak:start(["riak.config"]),
 	default_process_cabinet_handler:start(),
-	Options = [{ip, "127.0.0.1"}, {port, 8000}],
+	%Options = [{ip, "127.0.0.1"}, {port, 8000}],
+	Options = [{ip, "0.0.0.0"}, {port, 8000}],
 	Loop = fun loop/1,
 	mochiweb_http:start([{name, mochiweb_example_app}, {loop, Loop}, {max, 2048} | Options]).
 

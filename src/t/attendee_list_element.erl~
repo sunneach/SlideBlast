@@ -17,15 +17,13 @@ reflect() -> record_info(fields, attendee_list).
 % Executes when the element is rendered.
 render_element(_HtmlID, Record) ->
     DeckID = Record#attendee_list.deck_id,
-    Author = caster_utils:check_undefined(Record#attendee_list.author),
-    Title = caster_utils:check_undefined(Record#attendee_list.title),
     {ok, Pid} = wf:comet_global(fun() -> comet_loop(DeckID) end, DeckID),
     web_view:server_put(attendee_comet_pid, Pid),
     [
-         #span { id=theTalkTitle,   class=attendee_title, text= Title },
-         #span { id=theCoordinates, class=attendee,       text= "Location: " ++ Author},
-%         #span { id=theTalkTitle,   class=attendee_title, text=""}, %web_view:server_get(title) },
-%         #span { id=theCoordinates, class=attendee,       text=""}, %"Location: " ++ web_view:server_get(author)},
+%         #span { id=theTalkTitle,   class=attendee_title, text= web_view:server_get(title) },
+%         #span { id=theCoordinates, class=attendee,       text= "Location: " ++ web_view:server_get(author)},
+         #span { id=theTalkTitle,   class=attendee_title, text=""}, %web_view:server_get(title) },
+         #span { id=theCoordinates, class=attendee,       text=""}, %"Location: " ++ web_view:server_get(author)},
          #span { class=attendee_title, text="Participants" },
         #panel { id=attendeeList }
     ].

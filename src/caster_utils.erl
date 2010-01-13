@@ -3,7 +3,8 @@
     pdf_to_pngs/1,
     now_seconds/0,
     create_thumbnail/1,
-    seed_random/0
+    seed_random/0,
+    check_undefined/1
 ]).
 
 seed_random() ->
@@ -51,3 +52,6 @@ read_messages(Port, Acc) ->
         after 5000 ->
             error
     end.
+
+check_undefined(Value) when Value =:= undefined -> [];
+check_undefined(X) -> X.

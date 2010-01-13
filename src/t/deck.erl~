@@ -4,7 +4,7 @@
 -export ([load_blob/1, save_blob/2]).
 -export ([copy/3]).
 
--export([list_decks/0, archive_deck/2, clean/0, show_deck/1, all_decks/0, display_date/1, wipe/0, display/0]).
+-export([list_decks/0, archive_deck/1, clean/0, show_deck/1, all_decks/0, display_date/1]).
 
 -define (DECK_BUCKET, <<"caster_deck">>).
 -define (BLOB_BUCKET, <<"blob_bucket">>).
@@ -15,17 +15,11 @@ list_decks() ->
     {ok, Keys}   = Client:list_keys(?DECK_BUCKET),
     Keys.
 
-clean() ->
-   [ archive_deck(DeckID,?RETENTION) || DeckID <- list_decks() ].
-
-wipe() ->
-   lists:foreach(fun(DeckID) -> archive_deck(DeckID,-1) end, list_decks()).
-
-display() ->
-  display_date(all_decks()).
-
 all_decks() ->
    [ show_deck(DeckID) || DeckID <- list_decks() ].
+
+clean() ->
+   [ archive_deck(DeckID) || DeckID <- list_decks() ].
 
 display_date([]) -> ok;
 display_date([Deck|L]) ->
@@ -33,9 +27,9 @@ display_date([Deck|L]) ->
   io:format("~3p days old-->~10s/~s (~p) ~20s~20s~n",[Days, DeckID, Adm, length(Slides), Title, Author]),
   display_date(L).
 
-archive_deck(DeckID,Retention) ->
+archive_deck(DeckID) ->
    {DeckID,_Adm,Slides,_Title,_Author,Diff} = show_deck(DeckID),
-   case Diff > Retention of
+   case Diff > ?RETENTION of
      true -> remove_deck(DeckID,Slides);
      false -> ok
    end.
@@ -57,7 +51,7 @@ remove_deck(DeckID,[{_,_,_,BlobID,_,_}|Slides]) ->
     {ok, Client} = riak:client_connect(node()),
     Client:delete(?BLOB_BUCKET, BlobID, 2),
     ?PRINT({deleted_blob,BlobID}),
-    remove_deck(DeckID,Slides).
+    remove_deck(DeckID,Slides]);
 
 show_deck(DeckID) ->
     try load_deck(DeckID) of

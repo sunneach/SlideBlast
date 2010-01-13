@@ -41,23 +41,22 @@ render_element(_HtmlID, _Record) ->
 % Show the lightbox, and don't change slides in response to keyboard events.
 show() ->
     wf:wire(share_lightbox, #show {}),
-    Author = caster_utils:check_undefined(web_view:server_get(author)),
-    Title  = caster_utils:check_undefined(web_view:server_get(title)),
-    wf:wire(titleTextBox,"obj('me').value='" ++ Title ++"';"),
-    wf:wire(authorTextBox,"obj('me').value='" ++ Author ++"';"),
+    Author = web_view:server_get(author),
+    Title  = web_view:server_get(title),
+    wf:wire(titleTextBox,"obj('me').value='" ++ check_undefined(Title) ++"';"),
+    wf:wire(authorTextBox,"obj('me').value='" ++ check_undefined(Author) ++"';"),
     wf:wire(urlTextBox, "setShareURL(obj('me'));"),
     wf:wire("disableSlideControls();").
 
 % OK button was pressed. Hide the lightbox.
-show_titles(Author, Title) ->
-    wf:wire(theTalkTitle,"obj('me').innerHTML='"   ++ caster_utils:check_undefined(Title) ++"';"),
-    wf:wire(theCoordinates,"obj('me').innerHTML='Location: " ++ caster_utils:check_undefined(Author) ++"';").
-
 event(close) ->
     Author = wf:q(authorTextBox),
     Title = wf:q(titleTextBox),
-    show_titles(Author, Title),
-    web_view:broadcast( fun() -> show_titles(Author,Title) end ),
+    
+    web_view:broadcast( fun() ->
+		    wf:wire(theTalkTitle,"obj('me').innerHTML='"   ++ check_undefined(Title) ++"';"),
+		    wf:wire(theCoordinates,"obj('me').innerHTML='Location: " ++ check_undefined(Author) ++"';")
+    		end ),
 
     web_view:server_put(author, Author),
     web_view:server_put(title, Title),
@@ -77,3 +76,6 @@ event(close) ->
             ?PRINT(Author),
             name_dialog_element:show()
     end.
+
+check_undefined(Value) when Value =:= undefined -> [];
+check_undefined(X) -> X.

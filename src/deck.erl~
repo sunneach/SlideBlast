@@ -4,7 +4,7 @@
 -export ([load_blob/1, save_blob/2]).
 -export ([copy/3]).
 
--export([list_decks/0, archive_deck/2, clean/0, show_deck/1, all_decks/0, display_date/1, wipe/0, display/0]).
+-export([list_decks/0, archive_deck/2, clean/0, show_deck/1, all_decks/0, display_date/1, wipe/0]).
 
 -define (DECK_BUCKET, <<"caster_deck">>).
 -define (BLOB_BUCKET, <<"blob_bucket">>).

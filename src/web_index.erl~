@@ -105,7 +105,7 @@ process_file(zip, File, B) -> % ZIP
                         Acc ++ Slides
                 end
             end,
-%?PRINT(Results),
+?PRINT(Results),
             Slides = lists:foldl(F, [], lists:sort(Results)),
             {ok, lists:flatten(Slides)};
             
